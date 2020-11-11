@@ -3,7 +3,7 @@
 import { EventDispatcher } from "./EventDispatcher.js";
 
 
-export class PointCloudTreeNode extends EventDispatcher{
+export class PointCloudTreeNode extends EventDispatcher {
 
 	constructor(){
 		super();

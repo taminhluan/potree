@@ -32,7 +32,6 @@ export * from "./materials/NormalizationMaterial.js";
 export * from "./materials/PointCloudMaterial.js";
 
 export * from "./loader/POCLoader.js";
-export * from "./modules/loader/2.0/OctreeLoader.js";
 export * from "./loader/EptLoader.js";
 export * from "./loader/ept/BinaryLoader.js";
 export * from "./loader/ept/LaszipLoader.js";
@@ -67,7 +66,6 @@ export * from "./modules/OrientedImages/OrientedImages.js";
 export * from "./modules/Images360/Images360.js";
 export * from "./modules/CameraAnimation/CameraAnimation.js";
 
-export * from "./modules/loader/2.0/OctreeLoader.js";
 
 export {OrbitControls} from "./navigation/OrbitControls.js";
 export {FirstPersonControls} from "./navigation/FirstPersonControls.js";
@@ -81,6 +79,7 @@ import "./extensions/Ray.js";
 
 import {LRU} from "./LRU.js";
 import {OctreeLoader} from "./modules/loader/2.0/OctreeLoader.js";
+import {BeagleLoader} from "./modules/loader/beagle/BeagleLoader.js";
 import {POCLoader} from "./loader/POCLoader.js";
 import {EptLoader} from "./loader/EptLoader.js";
 import {PointCloudOctree} from "./PointCloudOctree.js";
@@ -139,6 +138,17 @@ export function loadPointCloud(path, name, callback){
 		// load pointcloud
 		if (!path){
 			// TODO: callback? comment? Hello? Bueller? Anyone?
+		} else if (path.indexOf('/b-eagle/potree') > 0) {
+			BeagleLoader.load(path, function (geometry) {
+				if (!geometry) {
+					//callback({type: 'loading_failed'});
+					console.error(new Error(`failed to load point cloud from URL: ${path}`));
+				} else {
+					let pointcloud = new PointCloudOctree(geometry);
+					// loaded(pointcloud);
+					resolve({type: 'pointcloud_loaded', pointcloud: pointcloud});
+				}
+			});
 		} else if (path.indexOf('ept.json') > 0) {
 			EptLoader.load(path, function(geometry) {
 				if (!geometry) {
@@ -162,7 +172,7 @@ export function loadPointCloud(path, name, callback){
 				}
 			});
 		} else if (path.indexOf('metadata.json') > 0) {
-			Potree.OctreeLoader.load(path).then(e => {
+			OctreeLoader.load(path).then(e => {
 				let geometry = e.geometry;
 
 				if(!geometry){
@@ -178,17 +188,6 @@ export function loadPointCloud(path, name, callback){
 						aPosition.range[1][2],
 					];
 
-					// loaded(pointcloud);
-					resolve({type: 'pointcloud_loaded', pointcloud: pointcloud});
-				}
-			});
-
-			OctreeLoader.load(path, function (geometry) {
-				if (!geometry) {
-					//callback({type: 'loading_failed'});
-					console.error(new Error(`failed to load point cloud from URL: ${path}`));
-				} else {
-					let pointcloud = new PointCloudOctree(geometry);
 					// loaded(pointcloud);
 					resolve({type: 'pointcloud_loaded', pointcloud: pointcloud});
 				}

@@ -32,5 +32,13 @@ export default [
 			name: 'Potree',
 			sourcemap: false
 		}
+	},{
+		input: 'src/modules/loader/beagle/BeagleLoadPointsWorker.js',
+		output: {
+			file: 'build/potree/workers/beagle/BeagleLoadPointsWorker.js',
+			format: 'es',
+			name: 'Potree',
+			sourcemap: false
+		}
 	}
 ]
