@@ -79,6 +79,13 @@ function parse(tileUnits, ColorMode, boundingBox) {
     tile3d.Positions = [];
     tile3d.Colors = [];
     tile3d.Normals = [];
+    tile3d.Indices = [];
+
+    let byte1 = 0;
+    let byte2 = 0;
+    let byte3 = 0;
+    let byte4 = 0;
+
     for (let i = 0; i < tileUnits.length; i++) {
         let tileUnit = tileUnits[i];
         tile3d.Spacing = tileUnit.Spacing;
@@ -124,6 +131,36 @@ function parse(tileUnits, ColorMode, boundingBox) {
                             tile3d.Normals.push(1);
                             tile3d.Normals.push(1);
                         }
+                        tile3d.Indices.push(byte1);
+                        tile3d.Indices.push(byte2);
+                        tile3d.Indices.push(byte3);
+                        tile3d.Indices.push(byte4);
+                        
+                        //TODO: change it to bitwise
+                        if (byte1 >= 255) {
+                            byte1 = 0;
+
+                            if (byte2 >= 255) {
+                                byte2 = 0;
+                                
+                                if (byte3 >= 255) {
+                                    byte3 = 0;
+
+                                    if (byte4 >= 255) {
+                                        byte4 = 0;
+                                        
+                                    } else {
+                                        byte4 ++;
+                                    }
+                                } else {
+                                    byte3 ++;
+                                }   
+                            } else {
+                                byte2 ++;
+                            }
+                        } else {
+                            byte1 ++;
+                        }
                     }
                 }
             }
@@ -136,6 +173,8 @@ function parse(tileUnits, ColorMode, boundingBox) {
     tile3d.Positions = new Float32Array(tile3d.Positions);
     tile3d.Colors = new Uint8Array(tile3d.Colors);
     tile3d.Normals = new Float32Array(tile3d.Normals);
+    tile3d.Indices = new Uint8Array(tile3d.Indices)
+
     return tile3d;
 }
 

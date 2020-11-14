@@ -44,6 +44,8 @@ export class BeaglePointsLoader {
             // geometry.attrs = e.data.Attributes;
             geometry.addAttribute('position', new THREE.BufferAttribute(e.data.Positions, 3));
 			geometry.addAttribute('rgba', new THREE.BufferAttribute(e.data.Colors, 4, true));
+			geometry.addAttribute('indices', new THREE.BufferAttribute(e.data.Indices, 4));
+			geometry.attributes.indices.normalized = true;
 			// geometry.offset = node.metadata.offset;
 
 
@@ -62,6 +64,7 @@ export class BeaglePointsLoader {
 			// node.tightBoundingBox = tightBoundingBox;
 			node.loaded = true;
 			node.loading = false;
+			node.spacing = data.Spacing;
 			// node.estimatedSpacing = data.estimatedSpacing;
 
 			Potree.numNodesLoading--;

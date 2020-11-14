@@ -29,20 +29,20 @@ function parseAttributes(cloudjs){
 	const pointAttributes = [];
 	if(version.upTo('1.7')){
 		
-		for(let attributeName of cloudjs.pointAttributes){
-			const oldAttribute = PointAttribute[attributeName];
+		// for(let attributeName of cloudjs.pointAttributes){
+		// 	const oldAttribute = PointAttribute[attributeName];
 
-			const attribute = {
-				name: oldAttribute.name,
-				size: oldAttribute.byteSize,
-				elements: oldAttribute.numElements,
-				elementSize: oldAttribute.byteSize / oldAttribute.numElements,
-				type: oldAttribute.type.name,
-				description: "",
-			};
+		// 	const attribute = {
+		// 		name: oldAttribute.name,
+		// 		size: oldAttribute.byteSize,
+		// 		elements: oldAttribute.numElements,
+		// 		elementSize: oldAttribute.byteSize / oldAttribute.numElements,
+		// 		type: oldAttribute.type.name,
+		// 		description: "",
+		// 	};
 
-			pointAttributes.push(attribute);
-		}
+		// 	pointAttributes.push(attribute);
+		// }
 
 	}else{
 		pointAttributes.push(...cloudjs.pointAttributes);
