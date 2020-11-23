@@ -136,13 +136,13 @@ export class BeagleLoader {
 					let max = new THREE.Vector3(response.boundingBox.ux, response.boundingBox.uy, response.boundingBox.uz);
 					
 
-					let delta_x = response.boundingBox.ux - response.boundingBox.lx
-					let delta_y = response.boundingBox.uy - response.boundingBox.ly
-					let delta_z = response.boundingBox.uz - response.boundingBox.lz
+					// let delta_x = response.boundingBox.ux - response.boundingBox.lx
+					// let delta_y = response.boundingBox.uy - response.boundingBox.ly
+					// let delta_z = response.boundingBox.uz - response.boundingBox.lz
 
-					let max_delta = Math.max(delta_x, delta_y, delta_z)
+					// let max_delta = Math.max(delta_x, delta_y, delta_z)
 					
-					max = new THREE.Vector3(min.x + max_delta, min.y + max_delta, min.z + max_delta);
+					// max = new THREE.Vector3(min.x + max_delta, min.y + max_delta, min.z + max_delta);
 
 					// min = new THREE.Vector3(0, 0, 0);
 
@@ -154,20 +154,23 @@ export class BeagleLoader {
 					// 	tightBoundingBox.max.copy(new THREE.Vector3(response.tightBoundingBox.ux, response.tightBoundingBox.uy, response.tightBoundingBox.uz));
 					// }
 
-					// let offset = min.clone();
+					// new logic
+					let offset = min.clone();
 
-					// boundingBox.min.sub(offset);
-					// boundingBox.max.sub(offset);
+					boundingBox.min.sub(offset);
+					boundingBox.max.sub(offset);
 
-					// tightBoundingBox.min.sub(offset);
-					// tightBoundingBox.max.sub(offset);
+					tightBoundingBox.min.sub(offset);
+					tightBoundingBox.max.sub(offset);
+					// end new logic
 
 					metadata.projection = response.projection;
 					metadata.boundingBox = boundingBox;
 					metadata.tightBoundingBox = tightBoundingBox;
 					metadata.boundingSphere = boundingBox.getBoundingSphere(new THREE.Sphere());
 					metadata.tightBoundingSphere = tightBoundingBox.getBoundingSphere(new THREE.Sphere());
-					metadata.offset = new THREE.Vector3(0, 0, 0);
+					// metadata.offset = new THREE.Vector3(0, 0, 0);
+					metadata.offset = offset;
 					
 					metadata.loader = new BeaglePointsLoader(response.version, metadata);
 					metadata.pointAttributes = parseAttributes(response);

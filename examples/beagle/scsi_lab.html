@@ -19,9 +19,6 @@
 	<script src="../../libs/spectrum/spectrum.js"></script>
 	<script src="../../libs/jquery-ui/jquery-ui.min.js"></script>
 	<script src="../../libs/three.js/build/three.min.js"></script>
-
-	<script src="../../libs/three.js/extra/lines.js"></script>
-	<script src="../../libs/three.js/extra/lines/LineMaterial.js"></script>
 	<script src="../../libs/three.js/extra/lines/LineGeometry.js"></script>
 	<script src="../../libs/other/BinaryHeap.js"></script>
 	<script src="../../libs/tween/tween.min.js"></script>
@@ -47,7 +44,7 @@
 		
 		viewer.setEDLEnabled(true);
 		viewer.setFOV(60);
-		viewer.setPointBudget(1*1000*1000);
+		viewer.setPointBudget(10*1000*1000);
 		viewer.setClipTask(Potree.ClipTask.SHOW_INSIDE);
 		viewer.loadSettingsFromURL();
 		
@@ -62,40 +59,39 @@
 			viewer.toggleSidebar();
 
 			$('#sldPointBudget').slider({
-				max: 3_000_000,
+				max: 15_000_000,
 				step: 1000,
 			});
 		});
 		
 		// Load and add point cloud to scene
-		Potree.loadPointCloud("http://localhost:8080/b-eagle/potree/metadata?project-id=Demo&point-cloud-id=Yonsei-main",
-			"Yonsei Main", function(e) {
+		Potree.loadPointCloud("http://localhost:8080/b-eagle/potree/metadata?project-id=Demo&point-cloud-id=Test_20200728",
+			"SCSI Lab", function(e) {
 			
-			console.log('Start load point cloud YONSEI-MAIN');
+			console.log('Start load point cloud YNCC');
 
 			let scene = viewer.scene;
+			// console.log('viewer', viewer);
+			// console.log('e', e);
 			let pointcloud = e.pointcloud;
 			
 			let material = pointcloud.material;
 			material.size = 1;
-			material.minSize = 2;
-			material.maxSize = 2;
 			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 			material.shape = Potree.PointShape.SQUARE;
-			// material.activeAttributeName = "elevation";
 			material.activeAttributeName = "rgba";
 			
 			scene.addPointCloud(pointcloud);
 			
-			let volume = new Potree.BoxVolume();
-			volume.position.set(0, 0, 0);
+			// let volume = new Potree.BoxVolume();
+			// volume.position.set(18.11, 14.94, 1.50);
 			// volume.scale.set(28.08, 19.07, 4.41);
 			// volume.clip = true;
-			scene.addVolume(volume);
+			// scene.addVolume(volume);
 			
 			// scene.view.setView(
-				// [-170.748125, -359.7480956, -13.77],
-				// [258.74735360000005, 69.74828699999999, 63.400000000000006],
+				// [-5.56294, -5.22904, 62.59093],
+				// [10.508640000000002, 3.3864900000000002, 66.24100000000001],
 			// );
 
 		});

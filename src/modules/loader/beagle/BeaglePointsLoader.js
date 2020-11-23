@@ -75,7 +75,8 @@ export class BeaglePointsLoader {
 			pointCloudID: node.metadata.pointCloudID,
 			loaders: node.loaders,
 			boundingBox: node.boundingBox,
-			baseURL: node.metadata.baseURL
+			baseURL: node.metadata.baseURL,
+			offset: node.metadata.offset
 		}
 		worker.postMessage(message);
 	};

@@ -24,7 +24,7 @@ self.addEventListener('message', function (e) {
     let pointCloudID = e.data.pointCloudID;
     let boundingBox = e.data.boundingBox;
     let baseURL = e.data.baseURL;
-
+    let offset = e.data.offset;
     let loaders = e.data.loaders;
 
 	let baseUrl = baseURL + "/loadPoints?ProjectId="
@@ -58,12 +58,12 @@ self.addEventListener('message', function (e) {
 
 	//TODO from global
 	let ColorMode = null;
-    let tile3d = parse(tileUnits, ColorMode, boundingBox);
+    let tile3d = parse(tileUnits, ColorMode, boundingBox, offset);
     // console.log(tile3d);
     self.postMessage(tile3d);
 })
 
-function parse(tileUnits, ColorMode, boundingBox) {
+function parse(tileUnits, ColorMode, boundingBox, offset) {
     // console.log('boundingBox', boundingBox);
     let min = boundingBox.min;
     //console.log(res);
@@ -104,7 +104,8 @@ function parse(tileUnits, ColorMode, boundingBox) {
                     // console.log('y', y + y)
                     // console.log('z', z + z)
                     if (!isNaN(x) && !isNaN(y) && !isNaN(z)){
-                        let point = new Point3D(x - min.x, y - min.y, z - min.z);
+                        let point = new Point3D(x - min.x - offset.x, y - min.y- offset.y, z - min.z- offset.z);
+                        // let point = new Point3D(x - offset.x, y - offset.y, z - offset.z);
                         point.others = st.slice(3, st.length);
                         let color = getColor(ColorMode, point);
                         tile3d.Attributes.push(point.others);
@@ -122,15 +123,15 @@ function parse(tileUnits, ColorMode, boundingBox) {
                         tile3d.Positions.push(point.x);
                         tile3d.Positions.push(point.y);
                         tile3d.Positions.push(point.z);
-                        if (st.length === 10) {
-                            tile3d.Normals.push(Number(st[7]));
-                            tile3d.Normals.push(Number(st[8]));
-                            tile3d.Normals.push(Number(st[9]));
-                        } else {
-                            tile3d.Normals.push(1);
-                            tile3d.Normals.push(1);
-                            tile3d.Normals.push(1);
-                        }
+                        // if (st.length === 10) {
+                        //     tile3d.Normals.push(Number(st[7]));
+                        //     tile3d.Normals.push(Number(st[8]));
+                        //     tile3d.Normals.push(Number(st[9]));
+                        // } else {
+                        //     tile3d.Normals.push(1);
+                        //     tile3d.Normals.push(1);
+                        //     tile3d.Normals.push(1);
+                        // }
                         tile3d.Indices.push(byte1);
                         tile3d.Indices.push(byte2);
                         tile3d.Indices.push(byte3);

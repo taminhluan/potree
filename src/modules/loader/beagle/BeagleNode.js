@@ -127,7 +127,7 @@ export class BeagleNode extends PointCloudTreeNode {
 			
 
 			let version = node.metadata.version;
-
+			
 			if (version.equalOrHigher("1.5")) {
 				let group = response[node.name]
 				if (!group) {
@@ -146,6 +146,7 @@ export class BeagleNode extends PointCloudTreeNode {
 				}
 				children = group.cs;
 			} else {
+				
 				node.loaders = response;
 				// console.log('loaders', response)
 				for (let key in response) {
@@ -155,6 +156,10 @@ export class BeagleNode extends PointCloudTreeNode {
 						}
 					})
 					spacing = response[key].Spacing;
+				}
+
+				if (node.name == 'r') {
+					node.metadata.spacing = spacing;
 				}
 			}
 			let count = 0;
@@ -171,7 +176,9 @@ export class BeagleNode extends PointCloudTreeNode {
 					child.tightBoundingBox = child.boundingBox
 					child.tightBoundingSphere = child.boundingSphere
 					node.spacing = spacing;
+
 					child.hasChildren = true;
+					
 
 					node.addChild(child);
 				}
